@@ -1,16 +1,35 @@
+import { sql } from 'drizzle-orm'
 import { z } from 'zod'
 import type { App } from '../app.js'
+import type { ErrorBody } from '../errors.js'
+
+const errorSchema = z.object({ codigo: z.string(), erro: z.string() })
 
 export async function healthRoutes(app: App) {
-  app.get(
-    '/health',
-    {
-      schema: {
-        response: {
-          200: z.object({ status: z.literal('ok') }),
+  for (const url of ['/health', '/api/health']) {
+    app.get(
+      url,
+      {
+        schema: {
+          response: {
+            200: z.object({ status: z.literal('ok'), banco: z.literal('ok') }),
+            503: errorSchema,
+          },
         },
       },
-    },
-    async () => ({ status: 'ok' as const }),
-  )
+      async (request, reply) => {
+        try {
+          await app.db.execute(sql`select 1`)
+        } catch (err) {
+          request.log.error({ err }, 'banco indisponível')
+          const body: ErrorBody = {
+            codigo: 'BANCO_INDISPONIVEL',
+            erro: 'Não foi possível conectar ao banco de dados.',
+          }
+          return reply.status(503).send(body)
+        }
+        return { status: 'ok' as const, banco: 'ok' as const }
+      },
+    )
+  }
 }

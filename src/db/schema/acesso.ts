@@ -5,13 +5,13 @@ import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 export const curadores = pgTable('curadores', {
   id: uuid().primaryKey().defaultRandom(),
   nome: text().notNull(),
-  tokenHash: text().notNull().unique(),
+  tokenHash: text().notNull().unique('curadores_token_hash_unique'),
   criadoEm: timestamp({ withTimezone: true }).notNull().defaultNow(),
 })
 
 export const estacoes = pgTable('estacoes', {
   id: uuid().primaryKey().defaultRandom(),
   nome: text().notNull(),
-  tokenHash: text().notNull().unique(),
+  tokenHash: text().notNull().unique('estacoes_token_hash_unique'),
   criadoEm: timestamp({ withTimezone: true }).notNull().defaultNow(),
 })

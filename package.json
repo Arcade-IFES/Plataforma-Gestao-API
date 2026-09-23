@@ -14,7 +14,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "db:up": "docker compose up -d --wait",
-    "db:down": "docker compose down"
+    "db:down": "docker compose down",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --env-file-if-exists=.env src/db/migrate.ts",
+    "db:migrate:prod": "node dist/db/migrate.js"
   },
   "repository": {
     "type": "git",

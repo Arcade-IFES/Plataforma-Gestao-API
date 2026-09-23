@@ -1,14 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { z } from 'zod'
-import { buildApp, type App } from '../src/app.js'
-import { loadEnv } from '../src/config/env.js'
+import type { App } from '../src/app.js'
 import { AppError } from '../src/errors.js'
+import { createTestApp } from './support/app.js'
 
 describe('formato de erro', () => {
   let app: App
 
   beforeAll(async () => {
-    app = await buildApp({ env: loadEnv({ NODE_ENV: 'test' }) })
+    app = await createTestApp()
 
     app.post(
       '/teste/validacao',
