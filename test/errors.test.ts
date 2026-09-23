@@ -73,6 +73,21 @@ describe('formato de erro', () => {
     })
   })
 
+  it('traduz os erros de requisição do Fastify', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/teste/validacao',
+      headers: { 'content-type': 'text/xml' },
+      payload: '<nome/>',
+    })
+
+    expect(response.statusCode).toBe(415)
+    expect(response.json()).toEqual({
+      codigo: 'REQUISICAO_INVALIDA',
+      erro: 'Content-Type não suportado. Envie application/json.',
+    })
+  })
+
   it('responde 400 para JSON malformado', async () => {
     const response = await app.inject({
       method: 'POST',

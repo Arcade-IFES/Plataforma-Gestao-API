@@ -1,10 +1,18 @@
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 import type { App } from '../app.js'
 import { jogos, pacotes, versoes } from '../db/schema/index.js'
 import { AppError, errorBodySchema } from '../errors.js'
 import { parseRepositorioUrl, urlCanonica } from '../github/cliente.js'
-import { gameSchema, montarGame } from '../jogos/apresentacao.js'
+import { origem } from '../http/origem.js'
+import {
+  detalheSchema,
+  estadoSchema,
+  gameSchema,
+  montarDetalhe,
+  montarGame,
+  type Game,
+} from '../jogos/apresentacao.js'
 import { LIMITE_PACOTE_BYTES, extrairZip, validarPacote } from '../pacotes/validador.js'
 
 const submissaoSchema = z.object({
@@ -25,6 +33,48 @@ function violacaoUnica(err: unknown, constraint: string) {
 }
 
 export async function jogosRoutes(app: App) {
+  app.get(
+    '/api/jogos',
+    {
+      schema: {
+        querystring: z.object({ status: estadoSchema.default('aprovado') }),
+        response: { 200: z.array(gameSchema), 400: errorBodySchema },
+      },
+    },
+    async (request) => {
+      // Uma entrada por versão no estado pedido; em `aprovado` há no máximo uma por jogo.
+      const lista = await app.db
+        .select({ id: versoes.id, jogoId: versoes.jogoId })
+        .from(versoes)
+        .where(eq(versoes.estado, request.query.status))
+        .orderBy(desc(versoes.submetidoEm))
+
+      const games = await Promise.all(
+        lista.map((v) =>
+          montarGame(app.db, v.jogoId, { origem: origem(request), versaoFocoId: v.id }),
+        ),
+      )
+      return games.filter((g): g is Game => g !== null)
+    },
+  )
+
+  app.get(
+    '/api/jogos/:id',
+    {
+      schema: {
+        params: z.object({ id: z.string() }),
+        response: { 200: detalheSchema, 404: errorBodySchema },
+      },
+    },
+    async (request) => {
+      const detalhe = await montarDetalhe(app.db, request.params.id, { origem: origem(request) })
+      if (!detalhe) {
+        throw new AppError(404, 'JOGO_NAO_ENCONTRADO', `O jogo "${request.params.id}" não existe.`)
+      }
+      return detalhe
+    },
+  )
+
   app.post(
     '/api/jogos',
     {
@@ -114,7 +164,10 @@ export async function jogosRoutes(app: App) {
         { jogo: manifesto.id, versao: manifesto.versao, commitSha },
         'jogo submetido',
       )
-      const game = await montarGame(app.db, manifesto.id, versaoId)
+      const game = await montarGame(app.db, manifesto.id, {
+        origem: origem(request),
+        versaoFocoId: versaoId,
+      })
       return reply.status(201).send(game!)
     },
   )

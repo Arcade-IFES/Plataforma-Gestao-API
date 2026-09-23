@@ -35,6 +35,8 @@ Tokens de curador e de estação: [docs/autenticacao.md](docs/autenticacao.md).
 
 Como preparar e submeter um jogo: [docs/submissao.md](docs/submissao.md).
 
+Catálogo, download para o fliperama e preview da curadoria: [docs/catalogo.md](docs/catalogo.md).
+
 ## Fluxo de branches
 
 Segue o padrão da organização:
