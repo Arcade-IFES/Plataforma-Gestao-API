@@ -1,0 +1,25 @@
+# Blueprint do Render: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: plataforma-gestao-api
+    runtime: node
+    plan: free
+    # Mais perto do Supabase em sa-east-1 (São Paulo); o Render não tem região na América do Sul.
+    region: virginia
+    branch: main
+    autoDeploy: true
+    # NODE_ENV=production faria o npm ci pular o TypeScript, que é devDependency.
+    buildCommand: npm ci --include=dev && npm run build
+    # O plano free não tem pre-deploy command, então as migrações rodam na inicialização.
+    startCommand: npm run db:migrate:prod && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: '24'
+      - key: NODE_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: info
+      # Connection string do Session pooler do Supabase, com ?sslmode=require (docs/supabase.md).
+      - key: DATABASE_URL
+        sync: false
