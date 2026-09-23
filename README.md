@@ -39,6 +39,8 @@ Catálogo, download para o fliperama e preview da curadoria: [docs/catalogo.md](
 
 Aprovar e reprovar versões: [docs/curadoria.md](docs/curadoria.md).
 
+Placares e votos (jogo → fliperama → API): [docs/placares.md](docs/placares.md).
+
 ## Fluxo de branches
 
 Segue o padrão da organização:
