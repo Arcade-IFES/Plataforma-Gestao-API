@@ -18,7 +18,7 @@ export async function estacoesRoutes(app: App) {
   app.post(
     '/api/estacoes',
     {
-      preHandler: exigirCurador,
+      onRequest: exigirCurador,
       schema: {
         body: z.object({ nome: z.string().trim().min(1).max(100) }),
         response: {
@@ -43,7 +43,7 @@ export async function estacoesRoutes(app: App) {
   app.get(
     '/api/estacoes',
     {
-      preHandler: exigirCurador,
+      onRequest: exigirCurador,
       schema: { response: { 200: z.array(estacaoSchema), ...erros } },
     },
     async () => {

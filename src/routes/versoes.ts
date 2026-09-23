@@ -17,7 +17,7 @@ export async function versoesRoutes(app: App) {
   app.post(
     '/api/versoes/:id/decisao',
     {
-      preHandler: exigirCurador,
+      onRequest: exigirCurador,
       schema: {
         params: z.object({ id: z.uuid() }),
         body: decisaoSchema,

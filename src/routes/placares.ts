@@ -9,7 +9,7 @@ export async function placaresRoutes(app: App) {
     app.post(
       url,
       {
-        preHandler: exigirEstacao,
+        onRequest: exigirEstacao,
         schema: {
           body: placarSchema,
           response: {
