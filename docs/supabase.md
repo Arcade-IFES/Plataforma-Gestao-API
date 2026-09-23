@@ -42,7 +42,7 @@ Defina `DATABASE_URL` com a mesma string:
 - **Local, apontando para o Supabase:** no arquivo `.env` (que não vai para o git).
 - **Render:** em **Environment → Environment Variables** do Web Service.
 
-Para conferir, `GET /health` responde `{"status":"ok","banco":"ok"}` quando a conexão funciona e `503` com `BANCO_INDISPONIVEL` quando não.
+Para conferir, `GET /health` responde `{"ok":true,...,"banco":"ok"}` quando a conexão funciona e `503` com `BANCO_INDISPONIVEL` quando não.
 
 ## Alterando o schema
 

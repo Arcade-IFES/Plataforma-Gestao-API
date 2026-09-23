@@ -3,6 +3,8 @@ import { z } from 'zod'
 import type { App } from '../app.js'
 import { errorBodySchema, type ErrorBody } from '../errors.js'
 
+const SERVICE = 'plataforma-gestao-api' as const
+
 export async function healthRoutes(app: App) {
   for (const url of ['/health', '/api/health']) {
     app.get(
@@ -10,7 +12,13 @@ export async function healthRoutes(app: App) {
       {
         schema: {
           response: {
-            200: z.object({ status: z.literal('ok'), banco: z.literal('ok') }),
+            // `ok` e `service` são os campos que o Portal (G2) lê.
+            200: z.object({
+              ok: z.literal(true),
+              service: z.literal(SERVICE),
+              status: z.literal('ok'),
+              banco: z.literal('ok'),
+            }),
             503: errorBodySchema,
           },
         },
@@ -26,7 +34,7 @@ export async function healthRoutes(app: App) {
           }
           return reply.status(503).send(body)
         }
-        return { status: 'ok' as const, banco: 'ok' as const }
+        return { ok: true as const, service: SERVICE, status: 'ok' as const, banco: 'ok' as const }
       },
     )
   }
