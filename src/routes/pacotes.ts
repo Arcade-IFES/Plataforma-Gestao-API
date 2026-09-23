@@ -16,6 +16,8 @@ export async function pacotesRoutes(app: App) {
     '/api/jogos/:id/pacote',
     {
       schema: {
+        tags: ['Catálogo'],
+        summary: 'Baixa o zip da versão aprovada (ETag, X-Sha256, 304)',
         params: z.object({ id: z.string() }),
         querystring: z.object({ versao: z.string().optional() }),
         // Sem `response`: o corpo é o zip (Buffer), e os erros saem pelo handler global.
@@ -35,7 +37,10 @@ export async function pacotesRoutes(app: App) {
           and(
             eq(versoes.jogoId, id),
             versao
-              ? and(eq(versoes.versao, versao), inArray(versoes.estado, ['aprovado', 'substituida']))
+              ? and(
+                  eq(versoes.versao, versao),
+                  inArray(versoes.estado, ['aprovado', 'substituida']),
+                )
               : eq(versoes.estado, 'aprovado'),
           ),
         )

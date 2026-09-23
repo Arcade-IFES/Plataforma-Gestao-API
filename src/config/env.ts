@@ -9,6 +9,14 @@ const envSchema = z.object({
   DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }),
   // Opcional: sobe o limite da API do GitHub de 60 para 5000 requisições por hora.
   GITHUB_TOKEN: z.string().min(1).optional(),
+  // Origens liberadas no CORS, separadas por vírgula. Sem valor, qualquer origem:
+  // a API não usa cookies, só tokens no cabeçalho Authorization.
+  CORS_ORIGINS: z
+    .string()
+    .optional()
+    .transform((valor) => (valor ? valor.split(',').map((o) => o.trim()).filter(Boolean) : '*')),
+  // Submissões de jogo por IP a cada 10 minutos (a rota é pública).
+  LIMITE_SUBMISSOES: z.coerce.number().int().positive().default(10),
 })
 
 export type Env = z.infer<typeof envSchema>

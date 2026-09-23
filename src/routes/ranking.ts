@@ -18,6 +18,8 @@ export async function rankingRoutes(app: App) {
     '/api/ranking/jogadores',
     {
       schema: {
+        tags: ['Rankings'],
+        summary: 'Ranking de jogadores de um jogo (melhor partida de cada apelido)',
         // Decisão da turma: o ranking de jogadores é sempre de um jogo.
         querystring: z.object({
           jogo: z.string({ error: 'informe o jogo: /api/ranking/jogadores?jogo=<id>' }).min(1),
@@ -35,7 +37,13 @@ export async function rankingRoutes(app: App) {
 
   app.get(
     '/api/ranking/jogos',
-    { schema: { response: { 200: z.array(rankingJogoSchema) } } },
+    {
+      schema: {
+        tags: ['Rankings'],
+        summary: 'Ranking de jogos pela nota ajustada',
+        response: { 200: z.array(rankingJogoSchema) },
+      },
+    },
     async () => rankingJogos(app.db),
   )
 
@@ -44,6 +52,9 @@ export async function rankingRoutes(app: App) {
     {
       onRequest: exigirCurador,
       schema: {
+        tags: ['Rankings'],
+        summary: 'Troca um apelido por ANON nas partidas e votos',
+        security: [{ curador: [] }],
         body: z.object({
           apelido: apelidoSchema.refine((a) => a !== APELIDO_ANONIMO, 'esse apelido já é anônimo'),
           jogo: z.string().min(1).optional(),
@@ -69,7 +80,10 @@ export async function rankingRoutes(app: App) {
         jogoId: jogo,
         curadorId: request.curador!.id,
       })
-      request.log.info({ jogo, ...alterados, curador: request.curador!.nome }, 'jogador anonimizado')
+      request.log.info(
+        { jogo, ...alterados, curador: request.curador!.nome },
+        'jogador anonimizado',
+      )
       return {
         ok: true as const,
         apelido_anterior: apelido,

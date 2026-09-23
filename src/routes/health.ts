@@ -11,6 +11,8 @@ export async function healthRoutes(app: App) {
       url,
       {
         schema: {
+          tags: ['Sistema'],
+          summary: 'Saúde da API e do banco',
           response: {
             // `ok` e `service` são os campos que o Portal (G2) lê.
             200: z.object({

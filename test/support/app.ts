@@ -17,8 +17,15 @@ const githubIndisponivelNosTestes: GithubClient = {
 export async function createTestApp({
   databaseUrl = TEST_DATABASE_URL,
   github = githubIndisponivelNosTestes,
-}: { databaseUrl?: string; github?: GithubClient } = {}) {
-  const env = loadEnv({ NODE_ENV: 'test', DATABASE_URL: databaseUrl })
+  env: extras = {},
+}: { databaseUrl?: string; github?: GithubClient; env?: Record<string, string> } = {}) {
+  // Limite de submissões alto: vários testes submetem em sequência.
+  const env = loadEnv({
+    NODE_ENV: 'test',
+    DATABASE_URL: databaseUrl,
+    LIMITE_SUBMISSOES: '1000',
+    ...extras,
+  })
   const { db, close } = createDb(env.DATABASE_URL)
   const app = await buildApp({ env, db, github })
   app.addHook('onClose', close)

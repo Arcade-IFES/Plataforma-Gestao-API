@@ -10,7 +10,16 @@ describe('loadEnv', () => {
       PORT: 3000,
       LOG_LEVEL: 'info',
       DATABASE_URL,
+      CORS_ORIGINS: '*',
+      LIMITE_SUBMISSOES: 10,
     })
+  })
+
+  it('separa as origens do CORS por vírgula', () => {
+    expect(
+      loadEnv({ DATABASE_URL, CORS_ORIGINS: 'https://portal.exemplo.com, http://localhost:5173' })
+        .CORS_ORIGINS,
+    ).toEqual(['https://portal.exemplo.com', 'http://localhost:5173'])
   })
 
   it('converte PORT para número', () => {

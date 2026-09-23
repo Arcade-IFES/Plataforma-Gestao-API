@@ -10,6 +10,9 @@ export async function curadoresRoutes(app: App) {
     {
       onRequest: exigirCurador,
       schema: {
+        tags: ['Autenticação'],
+        summary: 'Valida o token do curador e devolve quem é',
+        security: [{ curador: [] }],
         response: {
           200: z.object({ id: z.uuid(), nome: z.string() }),
           401: errorBodySchema,

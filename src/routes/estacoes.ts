@@ -20,6 +20,9 @@ export async function estacoesRoutes(app: App) {
     {
       onRequest: exigirCurador,
       schema: {
+        tags: ['Autenticação'],
+        summary: 'Cria uma estação (fliperama) e devolve o token uma única vez',
+        security: [{ curador: [] }],
         body: z.object({ nome: z.string().trim().min(1).max(100) }),
         response: {
           201: estacaoSchema.extend({
@@ -44,7 +47,12 @@ export async function estacoesRoutes(app: App) {
     '/api/estacoes',
     {
       onRequest: exigirCurador,
-      schema: { response: { 200: z.array(estacaoSchema), ...erros } },
+      schema: {
+        tags: ['Autenticação'],
+        summary: 'Lista as estações (sem os tokens)',
+        security: [{ curador: [] }],
+        response: { 200: z.array(estacaoSchema), ...erros },
+      },
     },
     async () => {
       const lista = await app.db
