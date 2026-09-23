@@ -65,30 +65,46 @@ export async function previewRoutes(app: App) {
   // Sem a barra final, os caminhos relativos do jogo (js/jogo.js) resolveriam errado.
   app.get(
     '/api/versoes/:id/preview',
-    { schema: { params: z.object({ id: z.string() }) } },
+    {
+      schema: {
+        tags: ['Curadoria'],
+        summary: 'Redireciona para /preview/',
+        params: z.object({ id: z.string() }),
+      },
+    },
     async (request, reply) => reply.redirect(`/api/versoes/${request.params.id}/preview/`, 301),
   )
 
-  app.get('/api/versoes/:id/preview/*', { schema: { params } }, async (request, reply) => {
-    const { arquivos, entrada } = await carregar(request.params.id)
+  app.get(
+    '/api/versoes/:id/preview/*',
+    {
+      schema: {
+        tags: ['Curadoria'],
+        summary: 'Serve os arquivos do pacote de qualquer versão, para jogar antes de decidir',
+        params,
+      },
+    },
+    async (request, reply) => {
+      const { arquivos, entrada } = await carregar(request.params.id)
 
-    let caminho = request.params['*'] || entrada
-    if (caminho.endsWith('/')) caminho += 'index.html'
-    const conteudo = arquivos.get(caminho)
-    if (!conteudo) naoEncontrado(`O arquivo "${caminho}" não existe no pacote.`)
+      let caminho = request.params['*'] || entrada
+      if (caminho.endsWith('/')) caminho += 'index.html'
+      const conteudo = arquivos.get(caminho)
+      if (!conteudo) naoEncontrado(`O arquivo "${caminho}" não existe no pacote.`)
 
-    return (
-      reply
-        .type(tipoDe(caminho))
-        // O conteúdo de uma versão nunca muda.
-        .header('Cache-Control', 'public, max-age=86400')
-        .header('X-Content-Type-Options', 'nosniff')
-        // O jogo é código de terceiros servido no domínio da API: roda numa origem
-        // isolada, sem acesso ao que for da API.
-        .header('Content-Security-Policy', 'sandbox allow-scripts allow-pointer-lock')
-        // Na origem isolada, o fetch do próprio jogo (ex.: questoes.json) vira cross-origin.
-        .header('Access-Control-Allow-Origin', '*')
-        .send(Buffer.from(conteudo))
-    )
-  })
+      return (
+        reply
+          .type(tipoDe(caminho))
+          // O conteúdo de uma versão nunca muda.
+          .header('Cache-Control', 'public, max-age=86400')
+          .header('X-Content-Type-Options', 'nosniff')
+          // O jogo é código de terceiros servido no domínio da API: roda numa origem
+          // isolada, sem acesso ao que for da API.
+          .header('Content-Security-Policy', 'sandbox allow-scripts allow-pointer-lock')
+          // Na origem isolada, o fetch do próprio jogo (ex.: questoes.json) vira cross-origin.
+          .header('Access-Control-Allow-Origin', '*')
+          .send(Buffer.from(conteudo))
+      )
+    },
+  )
 }

@@ -14,6 +14,12 @@ Quem consome:
 - PostgreSQL (Supabase em produção) com Drizzle ORM
 - Vitest
 
+## Documentação da API
+
+- **Produção:** https://plataforma-gestao-api.onrender.com
+- **Swagger (todas as rotas, com exemplos e "Try it out"):** https://plataforma-gestao-api.onrender.com/docs
+- Guias por tema em [docs/](docs/), listados abaixo.
+
 ## Rodando localmente
 
 Precisa de Node.js 24 e Docker.

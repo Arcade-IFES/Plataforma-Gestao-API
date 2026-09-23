@@ -11,6 +11,9 @@ export async function placaresRoutes(app: App) {
       {
         onRequest: exigirEstacao,
         schema: {
+          tags: ['Placares'],
+          summary: 'Registra a partida e o voto enviados pelo fliperama (201 nova, 200 repetida)',
+          security: [{ estacao: [] }],
           body: placarSchema,
           response: {
             200: resultadoPlacarSchema,

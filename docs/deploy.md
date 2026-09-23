@@ -25,7 +25,13 @@ O `render.yaml` só é lido da branch `main`. Enquanto ele não estiver no `main
 
 ## Variáveis opcionais
 
-- `GITHUB_TOKEN`: sobe o limite da API do GitHub usado nas submissões (veja [docs/submissao.md](submissao.md#limite-do-github)). Adicione em **Environment** no serviço.
+Adicione em **Environment** no serviço:
+
+| Variável | Padrão | Para quê |
+| --- | --- | --- |
+| `GITHUB_TOKEN` | — | Sobe o limite da API do GitHub nas submissões de 60 para 5000 por hora ([submissao.md](submissao.md#limite-do-github)). **Recomendado**: sem ele, o limite é dividido com outros serviços do Render e acaba rápido. |
+| `CORS_ORIGINS` | qualquer origem | Origens que podem chamar a API pelo navegador, separadas por vírgula (ex.: `https://portal.exemplo.com,http://localhost:5173`). A API não usa cookies, então liberar tudo é seguro. |
+| `LIMITE_SUBMISSOES` | `10` | Submissões de jogo por IP a cada 10 minutos. Acima disso, `429 MUITAS_REQUISICOES`. |
 
 ## Deploys seguintes
 
@@ -37,7 +43,9 @@ Para forçar um deploy sem commit novo: **Manual Deploy → Deploy latest commit
 
 Sem acesso por 15 minutos, o Render desliga o serviço. A primeira requisição depois disso leva de 30 a 60 s, e o fliperama ou o Portal podem dar timeout nesse meio-tempo.
 
-Para evitar isso durante a integração e a apresentação, programe um ping a cada 10 minutos no `/health`, por exemplo no [cron-job.org](https://cron-job.org) (gratuito). Outra opção é mudar o serviço para o plano **Starter**, que não dorme.
+O workflow [`manter-acordada.yml`](../.github/workflows/manter-acordada.yml) chama o `/health` a cada 5 minutos para evitar isso. Ele só roda a partir da branch padrão do repositório (`develop`), e o GitHub pode atrasar execuções agendadas em horários de pico. Dá para rodar manualmente em **Actions → Mantém a API acordada → Run workflow**.
+
+Um serviço acordado o mês inteiro usa cerca de 730 das 750 horas mensais do plano free do Render (contadas por workspace). Se houver outros serviços free no mesmo workspace, o limite pode estourar; nesse caso, desative o workflow ou mude o serviço para o plano **Starter**, que não dorme.
 
 ## Logs e problemas comuns
 
@@ -48,3 +56,5 @@ Os logs ficam em **Logs** no serviço.
 | `Variáveis de ambiente inválidas: - DATABASE_URL` | Variável vazia ou sem o prefixo `postgres://`/`postgresql://` |
 | `/health` responde 503 `BANCO_INDISPONIVEL` | Senha errada, caracteres especiais sem codificar, ou uso da conexão direta em vez do Session pooler |
 | Build falha com `tsc: not found` | O build command perdeu o `--include=dev` |
+| Submissões dão `503 GITHUB_INDISPONIVEL` (limite atingido) | Falta `GITHUB_TOKEN` |
+| O Portal recebe erro de CORS no navegador | `CORS_ORIGINS` definido sem a origem do Portal |
