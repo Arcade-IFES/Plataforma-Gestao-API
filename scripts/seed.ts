@@ -8,6 +8,7 @@
  */
 import { createHash } from 'node:crypto'
 import { strToU8, zipSync } from 'fflate'
+import { hashToken } from '../src/auth/tokens.js'
 import { createDb } from '../src/db/client.js'
 import {
   curadores,
@@ -139,11 +140,11 @@ try {
   await db.transaction(async (tx) => {
     await tx
       .insert(curadores)
-      .values({ id: IDS.curador, nome: 'Curador Dev', tokenHash: sha256('dev-curador') })
+      .values({ id: IDS.curador, nome: 'Curador Dev', tokenHash: hashToken('dev-curador') })
       .onConflictDoNothing()
     await tx
       .insert(estacoes)
-      .values({ id: IDS.estacao, nome: 'Estação Dev', tokenHash: sha256('dev-estacao') })
+      .values({ id: IDS.estacao, nome: 'Estação Dev', tokenHash: hashToken('dev-estacao') })
       .onConflictDoNothing()
 
     await tx.insert(jogos).values([quizInvaders, labirinto]).onConflictDoNothing()
