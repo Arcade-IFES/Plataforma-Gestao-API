@@ -4,7 +4,7 @@
 
 ## Onde estamos
 
-Os 9 passos do plano foram entregues em 23/09, adiantados em relação ao cronograma. Falta a release final, a integração com os outros grupos e a verificação em produção do placar chegando ao ranking.
+Os 9 passos do plano foram entregues e estão em produção desde 23/09, adiantados em relação ao cronograma. Falta a release final, a integração com os outros grupos e a verificação em produção do placar chegando ao ranking.
 
 | Passo | Branch | Estado | PR → `develop` | Release → `main` |
 | --- | --- | --- | --- | --- |
@@ -17,7 +17,7 @@ Os 9 passos do plano foram entregues em 23/09, adiantados em relação ao cronog
 | 6 | `feature/curadoria` | ✅ Em produção | #11 | #12 |
 | 7 | `feature/placares` | ✅ Em produção | #13 | #14 |
 | 8 | `feature/rankings` | ✅ Em produção | #15 | #16 |
-| 9 | `feature/deploy` | 🟡 No `develop`; falta o merge da release | #3, #17 | #18 (aberto) |
+| 9 | `feature/deploy` | ✅ Em produção | #3, #17 | #18 |
 | R | `develop` → `main` | ⏳ Pendente: release v0.1.0 com revisão | — | — |
 
 Cada passo foi para produção logo depois de entrar no `develop` (releases v0.0.1 a v0.0.8), em vez de esperar a release final. As branches `feature/*` são apagadas depois do merge.
@@ -25,7 +25,7 @@ Cada passo foi para produção logo depois de entrar no `develop` (releases v0.0
 **Produção:**
 
 - API: <https://plataforma-gestao-api.onrender.com> (Render, plano free, deploy automático do `main`).
-- Swagger: <https://plataforma-gestao-api.onrender.com/docs> (depois do merge do #18).
+- Swagger: <https://plataforma-gestao-api.onrender.com/docs>.
 - Banco: Supabase (Postgres 17, `us-east-1`), via Session pooler com `sslmode=require`.
 - Curador de produção: **Murilo**, criado com `npm run curador:criar`.
 - Jogo publicado: [`jogo-exemplo`](https://github.com/Arcade-IFES/jogo-exemplo) **1.1.0** aprovado. A 1.0.0 ficou `substituida`, o que testou a troca de versão em produção.
@@ -43,9 +43,8 @@ Cada passo foi para produção logo depois de entrar no `develop` (releases v0.0
 
 **Pendências:**
 
-- Merge do #18 (CORS, rate limit, Swagger e o ping). **O Portal só consegue chamar a produção pelo navegador depois dele.**
 - Release v0.1.0 (`develop` → `main`) com revisão de outra pessoa do grupo.
-- Integração com o G2, o G3 e o G4 (veja "Riscos para os outros grupos").
+- Integração com o G2, o G3 e o G4: o que cada um precisa fazer está em [integracao.md](integracao.md).
 - **Trocar a senha do banco no Supabase**: a atual é fraca e já apareceu em conversa. Atualizar no `.env` e no Render.
 - O repositório antigo `MuriloDiazs/Plataforma-Gestao-API` ainda existe e pode ser apagado.
 
@@ -170,7 +169,7 @@ A fonte do contrato é a [especificação do professor](https://paulossjunior.gi
 | 23/09 | Passos 0 a 3 | ✅ Passos 0 a 9, deploy e `jogo-exemplo` publicado |
 | 24/09 | Passos 4 e 5 | — |
 | 25/09 | Passos 6 a 8 | — |
-| 26/09 | Passo 9 e deploy | Merge do #18 e release v0.1.0 |
+| 26/09 | Passo 9 e deploy | Release v0.1.0 |
 | 27/09 | Integração com o G2 e o G3 | Integração com o G2, o G3 e o G4 |
 | 28/09 | Entrega E2 | — |
 
@@ -209,4 +208,4 @@ Com a folga, dá para adiantar a integração.
   - ✅ `GET /health` responde 200 com `"banco":"ok"`.
   - ✅ Passos 1 a 5 com o `jogo-exemplo`, incluindo a troca de versão 1.0.0 → 1.1.0.
   - ⏳ Passos 6 e 7 com o G3.
-- ⏳ Portal G2 apontado para a produção (depois do #18): catálogo, detalhe, curadoria e rankings carregam.
+- ⏳ Portal G2 apontado para a produção: catálogo, detalhe, curadoria e rankings carregam.
