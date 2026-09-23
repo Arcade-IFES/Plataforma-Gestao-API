@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto'
-import { sql } from 'drizzle-orm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { createDb } from '../src/db/client.js'
 import { estacoes, jogos, partidas, versoes, votos } from '../src/db/schema/index.js'
 import { TEST_DATABASE_URL } from './support/database.js'
+import { limparBanco } from './support/db.js'
 
 const { db, close } = createDb(TEST_DATABASE_URL)
 
@@ -45,7 +45,7 @@ async function erroDoBanco(promise: Promise<unknown>) {
 }
 
 beforeEach(async () => {
-  await db.execute(sql`truncate jogos, estacoes, curadores cascade`)
+  await limparBanco(db)
   await db.insert(jogos).values(jogo)
 })
 

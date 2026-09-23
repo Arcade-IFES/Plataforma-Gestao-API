@@ -5,10 +5,13 @@ import { z } from 'zod'
 // Mensagens de validação do Zod em português.
 z.config(z.locales.ptBR())
 
-export type ErrorBody = {
-  codigo: string
-  erro: string
-}
+/** Corpo de todas as respostas de erro; use nos `response` dos schemas das rotas. */
+export const errorBodySchema = z.object({
+  codigo: z.string(),
+  erro: z.string(),
+})
+
+export type ErrorBody = z.infer<typeof errorBodySchema>
 
 /** Erro de negócio que vira uma resposta `{ codigo, erro }` com o status informado. */
 export class AppError extends Error {

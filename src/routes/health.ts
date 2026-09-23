@@ -1,9 +1,7 @@
 import { sql } from 'drizzle-orm'
 import { z } from 'zod'
 import type { App } from '../app.js'
-import type { ErrorBody } from '../errors.js'
-
-const errorSchema = z.object({ codigo: z.string(), erro: z.string() })
+import { errorBodySchema, type ErrorBody } from '../errors.js'
 
 export async function healthRoutes(app: App) {
   for (const url of ['/health', '/api/health']) {
@@ -13,7 +11,7 @@ export async function healthRoutes(app: App) {
         schema: {
           response: {
             200: z.object({ status: z.literal('ok'), banco: z.literal('ok') }),
-            503: errorSchema,
+            503: errorBodySchema,
           },
         },
       },

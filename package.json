@@ -18,7 +18,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx --env-file-if-exists=.env src/db/migrate.ts",
     "db:migrate:prod": "node dist/db/migrate.js",
-    "db:seed": "tsx --env-file-if-exists=.env scripts/seed.ts"
+    "db:seed": "tsx --env-file-if-exists=.env scripts/seed.ts",
+    "curador:criar": "tsx --env-file-if-exists=.env scripts/criar-curador.ts"
   },
   "repository": {
     "type": "git",
