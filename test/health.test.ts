@@ -32,7 +32,7 @@ describe('GET /health sem banco', () => {
 
   beforeAll(async () => {
     // Porta sem nenhum Postgres escutando.
-    app = await createTestApp('postgres://gestao:gestao@127.0.0.1:1/gestao')
+    app = await createTestApp({ databaseUrl: 'postgres://gestao:gestao@127.0.0.1:1/gestao' })
     await app.ready()
   })
 
