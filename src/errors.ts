@@ -25,6 +25,16 @@ export class AppError extends Error {
   }
 }
 
+/** Erros de requisição do próprio Fastify, que vêm em inglês. */
+const MENSAGENS_FASTIFY: Record<string, string> = {
+  FST_ERR_CTP_INVALID_JSON_BODY: 'O corpo da requisição não é um JSON válido.',
+  FST_ERR_CTP_EMPTY_JSON_BODY: 'O corpo da requisição está vazio, mas o Content-Type é JSON.',
+  FST_ERR_CTP_INVALID_CONTENT_LENGTH:
+    'O corpo recebido não bate com o Content-Length. Envie o JSON codificado em UTF-8.',
+  FST_ERR_CTP_BODY_TOO_LARGE: 'O corpo da requisição é grande demais.',
+  FST_ERR_CTP_INVALID_MEDIA_TYPE: 'Content-Type não suportado. Envie application/json.',
+}
+
 export function registerErrorHandlers(app: FastifyInstance) {
   app.setNotFoundHandler((request, reply) => {
     const body: ErrorBody = {
@@ -55,18 +65,13 @@ export function registerErrorHandlers(app: FastifyInstance) {
       return reply.status(400).send(body)
     }
 
-    if (error.code === 'FST_ERR_CTP_INVALID_JSON_BODY') {
-      const body: ErrorBody = {
-        codigo: 'REQUISICAO_INVALIDA',
-        erro: 'O corpo da requisição não é um JSON válido.',
-      }
-      return reply.status(400).send(body)
-    }
-
     const statusCode = error.statusCode ?? 500
 
     if (statusCode < 500) {
-      const body: ErrorBody = { codigo: 'REQUISICAO_INVALIDA', erro: error.message }
+      const body: ErrorBody = {
+        codigo: 'REQUISICAO_INVALIDA',
+        erro: MENSAGENS_FASTIFY[error.code] ?? error.message,
+      }
       return reply.status(statusCode).send(body)
     }
 

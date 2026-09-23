@@ -12,6 +12,8 @@ import { curadoresRoutes } from './routes/curadores.js'
 import { estacoesRoutes } from './routes/estacoes.js'
 import { healthRoutes } from './routes/health.js'
 import { jogosRoutes } from './routes/jogos.js'
+import { pacotesRoutes } from './routes/pacotes.js'
+import { previewRoutes } from './routes/preview.js'
 
 export type AppOptions = {
   env: Env
@@ -30,6 +32,8 @@ declare module 'fastify' {
 export async function buildApp({ env, db, github }: AppOptions) {
   const app = Fastify({
     logger: env.NODE_ENV === 'test' ? false : { level: env.LOG_LEVEL },
+    // O Render fica na frente como proxy; assim protocolo e host vêm dos X-Forwarded-*.
+    trustProxy: true,
   }).withTypeProvider<ZodTypeProvider>()
 
   app.setValidatorCompiler(validatorCompiler)
@@ -44,6 +48,8 @@ export async function buildApp({ env, db, github }: AppOptions) {
   await app.register(curadoresRoutes)
   await app.register(estacoesRoutes)
   await app.register(jogosRoutes)
+  await app.register(pacotesRoutes)
+  await app.register(previewRoutes)
 
   return app
 }
