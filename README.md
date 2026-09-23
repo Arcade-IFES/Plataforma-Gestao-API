@@ -29,7 +29,7 @@ npm run dev            # http://localhost:3000/health
 
 `npm test` recria o banco `gestao_test` a cada execução e não mexe no banco de desenvolvimento.
 
-O banco de produção fica no Supabase: veja [docs/supabase.md](docs/supabase.md).
+O banco de produção fica no Supabase ([docs/supabase.md](docs/supabase.md)) e a API roda no Render ([docs/deploy.md](docs/deploy.md)).
 
 ## Fluxo de branches
 

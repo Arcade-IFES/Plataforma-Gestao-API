@@ -13,6 +13,11 @@ Em produção a API usa só o **Postgres** do Supabase. Nenhum outro recurso (Au
    ```
 
 4. Troque `[YOUR-PASSWORD]` pela senha do banco. Se esqueceu, gere outra em **Project Settings → Database → Reset database password**.
+5. Acrescente `?sslmode=require` ao final, para a conexão sempre usar SSL:
+
+   ```
+   postgresql://postgres.<ref-do-projeto>:<senha>@aws-0-<região>.pooler.supabase.com:5432/postgres?sslmode=require
+   ```
 
 Caracteres especiais na senha precisam ser codificados na URL: `@` → `%40`, `#` → `%23`, `/` → `%2F`, `:` → `%3A`.
 
@@ -23,10 +28,10 @@ Caracteres especiais na senha precisam ser codificados na URL: `@` → `%40`, `#
 As migrações ficam em `drizzle/` e são aplicadas em ordem; rodar de novo não faz nada.
 
 ```bash
-DATABASE_URL="postgresql://postgres.<ref>:<senha>@aws-0-<região>.pooler.supabase.com:5432/postgres" npm run db:migrate
+DATABASE_URL="postgresql://postgres.<ref>:<senha>@aws-0-<região>.pooler.supabase.com:5432/postgres?sslmode=require" npm run db:migrate
 ```
 
-No Render, o mesmo comando roda antes de cada deploy (`npm run db:migrate:prod`, configurado no passo de deploy).
+No Render, as migrações rodam sozinhas a cada inicialização do serviço (`npm run db:migrate:prod`); veja [docs/deploy.md](deploy.md).
 
 **Não rode `npm run db:seed` em produção.** Ele cria tokens de desenvolvimento conhecidos e por isso se recusa a rodar contra um banco que não seja local.
 
