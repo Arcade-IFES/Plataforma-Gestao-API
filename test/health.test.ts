@@ -18,7 +18,12 @@ describe.each(['/health', '/api/health'])('GET %s', (url) => {
     const response = await app.inject({ method: 'GET', url })
 
     expect(response.statusCode).toBe(200)
-    expect(response.json()).toEqual({ status: 'ok', banco: 'ok' })
+    expect(response.json()).toEqual({
+      ok: true,
+      service: 'plataforma-gestao-api',
+      status: 'ok',
+      banco: 'ok',
+    })
   })
 })
 

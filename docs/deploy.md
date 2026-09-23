@@ -19,7 +19,7 @@ A API roda como **Web Service** no Render, configurado pelo [`render.yaml`](../r
 4. Escolha o repositório e a branch `main`. O Render lê o `render.yaml` e mostra o serviço `plataforma-gestao-api`.
 5. Preencha `DATABASE_URL` com a connection string do Session pooler do Supabase, terminando em `?sslmode=require`.
 6. **Apply**. O primeiro deploy roda o build, aplica as migrações e sobe a API.
-7. Confira `https://plataforma-gestao-api.onrender.com/health` (o Render mostra a URL exata no topo do serviço). Deve responder `{"status":"ok","banco":"ok"}`.
+7. Confira `https://plataforma-gestao-api.onrender.com/health` (o Render mostra a URL exata no topo do serviço). Deve responder com `"banco":"ok"`.
 
 O `render.yaml` só é lido da branch `main`. Enquanto ele não estiver no `main`, o Blueprint não encontra o arquivo.
 
