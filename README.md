@@ -49,6 +49,8 @@ Placares e votos (jogo → fliperama → API): [docs/placares.md](docs/placares.
 
 Rankings de jogadores (por jogo) e de jogos, e anonimização: [docs/ranking.md](docs/ranking.md).
 
+O que o G2, o G3 e o G4 precisam fazer para integrar: [docs/integracao.md](docs/integracao.md).
+
 ## Fluxo de branches
 
 Segue o padrão da organização:
