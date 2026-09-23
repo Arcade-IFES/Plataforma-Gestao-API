@@ -30,6 +30,8 @@ declare module 'fastify' {
 export async function buildApp({ env, db, github }: AppOptions) {
   const app = Fastify({
     logger: env.NODE_ENV === 'test' ? false : { level: env.LOG_LEVEL },
+    // O Render fica na frente como proxy; assim protocolo e host vêm dos X-Forwarded-*.
+    trustProxy: true,
   }).withTypeProvider<ZodTypeProvider>()
 
   app.setValidatorCompiler(validatorCompiler)
