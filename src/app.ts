@@ -13,6 +13,7 @@ import { estacoesRoutes } from './routes/estacoes.js'
 import { healthRoutes } from './routes/health.js'
 import { jogosRoutes } from './routes/jogos.js'
 import { pacotesRoutes } from './routes/pacotes.js'
+import { previewRoutes } from './routes/preview.js'
 
 export type AppOptions = {
   env: Env
@@ -48,6 +49,7 @@ export async function buildApp({ env, db, github }: AppOptions) {
   await app.register(estacoesRoutes)
   await app.register(jogosRoutes)
   await app.register(pacotesRoutes)
+  await app.register(previewRoutes)
 
   return app
 }
