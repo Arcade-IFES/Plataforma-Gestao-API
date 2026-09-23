@@ -7,6 +7,8 @@ const envSchema = z.object({
     .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
     .default('info'),
   DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }),
+  // Opcional: sobe o limite da API do GitHub de 60 para 5000 requisições por hora.
+  GITHUB_TOKEN: z.string().min(1).optional(),
 })
 
 export type Env = z.infer<typeof envSchema>
