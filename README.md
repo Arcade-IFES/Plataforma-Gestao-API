@@ -14,6 +14,23 @@ Quem consome:
 - PostgreSQL (Supabase em produção) com Drizzle ORM
 - Vitest
 
+## Rodando localmente
+
+Precisa de Node.js 24 e Docker.
+
+```bash
+npm ci
+cp .env.example .env   # já aponta para o Postgres do docker compose
+npm run db:up          # sobe o Postgres local (bancos gestao e gestao_test)
+npm run db:migrate     # cria as tabelas
+npm run db:seed        # dados de exemplo; tokens dev-curador e dev-estacao
+npm run dev            # http://localhost:3000/health
+```
+
+`npm test` recria o banco `gestao_test` a cada execução e não mexe no banco de desenvolvimento.
+
+O banco de produção fica no Supabase ([docs/supabase.md](docs/supabase.md)) e a API roda no Render ([docs/deploy.md](docs/deploy.md)).
+
 ## Fluxo de branches
 
 Segue o padrão da organização:
