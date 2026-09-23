@@ -12,6 +12,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core'
+import { curadores } from './acesso.js'
 
 const bytea = customType<{ data: Buffer; driverData: Buffer }>({
   dataType: () => 'bytea',
@@ -60,6 +61,7 @@ export const versoes = pgTable(
     sha256: text().notNull(),
     manifesto: jsonb().notNull(),
     totalQuestoes: integer().notNull(),
+    decididoPor: uuid().references(() => curadores.id),
     justificativa: text(),
     submetidoEm: timestamp({ withTimezone: true }).notNull().defaultNow(),
     decididoEm: timestamp({ withTimezone: true }),
