@@ -68,6 +68,10 @@ git push origin v1.0.0
 
 O pacote todo (o zip do repositório) pode ter no máximo **20 MB**.
 
+### Fim da partida: apelido e placar
+
+No fim de cada partida, o jogo pede o **apelido** do jogador (A-Z e 0-9, até 9 caracteres) e envia a mensagem `PLACAR` ao fliperama, com o apelido em `jogador`. Detalhes e exemplo em [placares.md](placares.md#1-o-jogo-envia-placar-g4).
+
 ## Submeter (Portal / G2)
 
 ```http

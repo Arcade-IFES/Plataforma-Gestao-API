@@ -32,7 +32,7 @@ describe('autenticação', () => {
 
   beforeAll(async () => {
     app = await createTestApp()
-    app.get('/teste/estacao', { preHandler: exigirEstacao }, async (request) => request.estacao)
+    app.get('/teste/estacao', { onRequest: exigirEstacao }, async (request) => request.estacao)
     await app.ready()
   })
 
@@ -187,6 +187,19 @@ describe('autenticação', () => {
 
       expect(response.statusCode).toBe(400)
       expect(response.json().codigo).toBe('REQUISICAO_INVALIDA')
+    })
+  })
+
+  describe('ordem dos erros', () => {
+    it.each([
+      ['/api/estacoes', {}],
+      ['/api/versoes/00000000-0000-4000-8000-000000000000/decisao', {}],
+      ['/api/placares', { pontos: -1 }],
+    ])('POST %s sem token dá 401 antes de validar o corpo', async (url, payload) => {
+      const response = await app.inject({ method: 'POST', url, payload })
+
+      expect(response.statusCode).toBe(401)
+      expect(response.json().codigo).toBe('NAO_AUTENTICADO')
     })
   })
 

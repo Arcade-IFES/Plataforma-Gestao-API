@@ -8,7 +8,7 @@ export async function curadoresRoutes(app: App) {
   app.get(
     '/api/curadores/eu',
     {
-      preHandler: exigirCurador,
+      onRequest: exigirCurador,
       schema: {
         response: {
           200: z.object({ id: z.uuid(), nome: z.string() }),

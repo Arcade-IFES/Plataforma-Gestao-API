@@ -30,7 +30,7 @@ function tokenInvalido(): never {
   throw new AppError(401, 'TOKEN_INVALIDO', 'Token inválido ou revogado.')
 }
 
-/** preHandler que exige um token de curador e preenche `request.curador`. */
+/** Hook (onRequest) que exige um token de curador e preenche `request.curador`. */
 export async function exigirCurador(request: FastifyRequest, _reply: FastifyReply) {
   const tokenHash = hashToken(lerBearer(request))
   const [curador] = await request.server.db
@@ -41,7 +41,7 @@ export async function exigirCurador(request: FastifyRequest, _reply: FastifyRepl
   request.curador = curador
 }
 
-/** preHandler que exige um token de estação e preenche `request.estacao`. */
+/** Hook (onRequest) que exige um token de estação e preenche `request.estacao`. */
 export async function exigirEstacao(request: FastifyRequest, _reply: FastifyReply) {
   const tokenHash = hashToken(lerBearer(request))
   const [estacao] = await request.server.db
