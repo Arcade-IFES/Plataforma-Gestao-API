@@ -31,6 +31,8 @@ npm run dev            # http://localhost:3000/health
 
 O banco de produção fica no Supabase ([docs/supabase.md](docs/supabase.md)) e a API roda no Render ([docs/deploy.md](docs/deploy.md)).
 
+Tokens de curador e de estação: [docs/autenticacao.md](docs/autenticacao.md).
+
 ## Fluxo de branches
 
 Segue o padrão da organização:
