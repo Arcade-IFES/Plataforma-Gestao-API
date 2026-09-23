@@ -4,14 +4,15 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
+import type { Env } from './config/env.js'
 
 export type AppOptions = {
-  logger?: boolean
+  env: Env
 }
 
-export async function buildApp(options: AppOptions = {}) {
+export async function buildApp({ env }: AppOptions) {
   const app = Fastify({
-    logger: options.logger ?? false,
+    logger: env.NODE_ENV === 'test' ? false : { level: env.LOG_LEVEL },
   }).withTypeProvider<ZodTypeProvider>()
 
   app.setValidatorCompiler(validatorCompiler)
