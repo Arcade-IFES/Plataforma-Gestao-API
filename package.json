@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MuriloDiazs/Plataforma-Gestao-API.git"
+    "url": "git+https://github.com/Arcade-IFES/Plataforma-Gestao-API.git"
   },
   "dependencies": {
     "fastify": "^5.12.5",
