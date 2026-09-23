@@ -37,6 +37,8 @@ export async function jogosRoutes(app: App) {
     '/api/jogos',
     {
       schema: {
+        tags: ['Catálogo'],
+        summary: 'Catálogo de jogos por status (padrão: aprovado)',
         querystring: z.object({ status: estadoSchema.default('aprovado') }),
         response: { 200: z.array(gameSchema), 400: errorBodySchema },
       },
@@ -62,6 +64,8 @@ export async function jogosRoutes(app: App) {
     '/api/jogos/:id',
     {
       schema: {
+        tags: ['Catálogo'],
+        summary: 'Detalhe do jogo, com versões, feedbacks e taxa de acerto por tema',
         params: z.object({ id: z.string() }),
         response: { 200: detalheSchema, 404: errorBodySchema },
       },
@@ -78,13 +82,18 @@ export async function jogosRoutes(app: App) {
   app.post(
     '/api/jogos',
     {
+      // Rota pública que baixa do GitHub: limita por IP.
+      config: { rateLimit: { max: app.env.LIMITE_SUBMISSOES, timeWindow: '10 minutes' } },
       schema: {
+        tags: ['Submissão'],
+        summary: 'Submete um jogo pelo link do repositório GitHub e uma tag',
         body: submissaoSchema,
         response: {
           201: gameSchema,
           400: errorBodySchema,
           409: errorBodySchema,
           422: errorBodySchema,
+          429: errorBodySchema,
           503: errorBodySchema,
         },
       },

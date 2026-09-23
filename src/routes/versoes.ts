@@ -19,6 +19,9 @@ export async function versoesRoutes(app: App) {
     {
       onRequest: exigirCurador,
       schema: {
+        tags: ['Curadoria'],
+        summary: 'Aprova ou reprova uma versão submetida',
+        security: [{ curador: [] }],
         params: z.object({ id: z.uuid() }),
         body: decisaoSchema,
         response: {
