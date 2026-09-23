@@ -7,6 +7,8 @@ import {
 import type { Env } from './config/env.js'
 import type { Db } from './db/client.js'
 import { registerErrorHandlers } from './errors.js'
+import { curadoresRoutes } from './routes/curadores.js'
+import { estacoesRoutes } from './routes/estacoes.js'
 import { healthRoutes } from './routes/health.js'
 
 export type AppOptions = {
@@ -33,6 +35,8 @@ export async function buildApp({ env, db }: AppOptions) {
   registerErrorHandlers(app)
 
   await app.register(healthRoutes)
+  await app.register(curadoresRoutes)
+  await app.register(estacoesRoutes)
 
   return app
 }
