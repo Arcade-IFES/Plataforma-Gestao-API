@@ -23,6 +23,10 @@ A API roda como **Web Service** no Render, configurado pelo [`render.yaml`](../r
 
 O `render.yaml` só é lido da branch `main`. Enquanto ele não estiver no `main`, o Blueprint não encontra o arquivo.
 
+## Variáveis opcionais
+
+- `GITHUB_TOKEN`: sobe o limite da API do GitHub usado nas submissões (veja [docs/submissao.md](submissao.md#limite-do-github)). Adicione em **Environment** no serviço.
+
 ## Deploys seguintes
 
 Todo merge no `main` gera um deploy novo. As migrações rodam na inicialização, antes do servidor subir. Se uma migração falhar, o serviço não sobe, e o Render mantém a versão anterior no ar porque o health check não passa.
