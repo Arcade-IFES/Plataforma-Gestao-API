@@ -5,6 +5,7 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 import type { Env } from './config/env.js'
+import { healthRoutes } from './routes/health.js'
 
 export type AppOptions = {
   env: Env
@@ -17,6 +18,8 @@ export async function buildApp({ env }: AppOptions) {
 
   app.setValidatorCompiler(validatorCompiler)
   app.setSerializerCompiler(serializerCompiler)
+
+  await app.register(healthRoutes)
 
   return app
 }
