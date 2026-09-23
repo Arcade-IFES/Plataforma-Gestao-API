@@ -41,6 +41,8 @@ Aprovar e reprovar versões: [docs/curadoria.md](docs/curadoria.md).
 
 Placares e votos (jogo → fliperama → API): [docs/placares.md](docs/placares.md).
 
+Rankings de jogadores (por jogo) e de jogos, e anonimização: [docs/ranking.md](docs/ranking.md).
+
 ## Fluxo de branches
 
 Segue o padrão da organização:
